@@ -30,6 +30,17 @@ user.save().then((result)=>{
 }).catch((err)=>console.log(err))
   })
 } 
+
+const getUserEmail=async(req,res)=>{
+  const userEmail=await User.findOne({
+    where:{email:req.params.email}
+  })
+  try {
+    res.json(userEmail)
+  } catch (err) {
+    console.log(err)
+  }
+}
 const login=(req,res)=>{
     User.findOne({ where: { email: req.body.email } }).then((user) => {
         bcrypt
@@ -61,14 +72,13 @@ const updateUser=async(req,res)=>{
     LastName:req.body.LastName,
     username:req.body.username,
     email:req.body.email,
-    Password:hashedPass,
     DateOfBirth:req.body.DateOfBirth,
     gender:req.body.gender,
-    bio:req.body.bio})
+    bio:req.body.bio},{ where: { id: req.params.id } })
     try {
      res.json(updeted)
     } catch (err) {
       console.log(err);
     }
 }
-module.exports={getUser,register,login,updateUser}
+module.exports={getUser,register,login,updateUser,getUserEmail}
