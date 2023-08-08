@@ -10,4 +10,5 @@ const follow=sequelize.define('follow',{
 
 })
 
+
 module.exports=follow

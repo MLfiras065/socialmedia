@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import { storage } from "./config";
+// import { storage } from "./config";
 
 import { Button, Image, View, Platform , TextInput, TouchableOpacity,Text} from 'react-native';
  import * as ImagePicker from 'expo-image-picker';

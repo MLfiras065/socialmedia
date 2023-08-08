@@ -7,4 +7,13 @@ try {
     console.log(err);
 }
 }
-module.exports={getFollow}
+const addFriend=async(req,res)=>{
+const {theFollowedUserid}=req.body
+const add=await follo.create({theFollowedUserid})
+try {
+    res.json(add)
+} catch (err) {
+    console.log(err);
+}
+}
+module.exports={getFollow,addFriend}

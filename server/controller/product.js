@@ -12,7 +12,9 @@ const getProduct=async(req,res)=>{
             title:req.body.title,
             price:req.body.price,
             images:req.body.images,
-            description:req.body.description
+            description:req.body.description,
+            bought:req.body.bought,
+            userid:req.body.userid
         })
         try {
       res.json(added)      
@@ -21,16 +23,21 @@ const getProduct=async(req,res)=>{
         }
     }
     const updProd=async(req,res)=>{
-        const updProd= await product.create({
-            title:req.body.title,
-            price:req.body.price,
-            images:req.body.images,
-            description:req.body.description
-        })
+        const {title,price,images,description}=req.body
+        const updProd= await product.update({title,price,images,description},{where:{id:req.params.id}})
         try {
             res.json(updProd)
         } catch (err) {
             console.log(err);
         }
     }
-    module.exports={getProduct,addProd,updProd}
+    const deleteProd=async(req,res)=>{
+        const del=await product.destroy({where:{id:req.params.id}})
+    try {
+        res.json(del)
+    } catch (err) {
+        console.log(err);
+    }
+    }
+
+    module.exports={getProduct,addProd,updProd,deleteProd}

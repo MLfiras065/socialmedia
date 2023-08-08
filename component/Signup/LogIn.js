@@ -32,7 +32,7 @@ function LogIn({ navigation }) {
       .then((res) => {
         alert("login");
         SessionStorage.setItem("email", email)
-      
+      SessionStorage.setItem('userid',id)
       console.log("storage",SessionStorage);
       })
       .catch((err) => {
@@ -42,11 +42,13 @@ function LogIn({ navigation }) {
   };
   const handleLogIn = () => {
     logIn(email, Password);
+    navigation.navigate("home",{screen:"Home"})
   };
 
   const onPress = () => navigation.navigate("signup", { screen: "Signup" });
   const onPressprofile = () => navigation.navigate("profile", { screen: "Main" });
   const onPresshome = () => navigation.navigate("home", { screen: "Home" });
+  const onPressShop = () => navigation.navigate("shop", { screen: "Shop" });
  
   return (
     <View style={styles.container}>
@@ -98,6 +100,7 @@ function LogIn({ navigation }) {
     
         <Button title="profile" onPress={onPressprofile} />
         <Button title="home" onPress={onPresshome} />
+        <Button title="shop" onPress={onPressShop} />
   </View>
         
         

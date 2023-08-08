@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, FlatList,Button, TextInput } from 'react-native';
-import Modal from "react-native-modal";
+import SessionStorage from 'react-native-session-storage';
 
 function Home() {
  
@@ -11,7 +11,7 @@ const [username,setUsername]=useState('')
 const [image,setimage]=useState('')
 const [postText,setPostText]=useState('')
 const [postImage,setPostImage]=useState('')
-
+const userid = SessionStorage.getItem('userid')
 const getUser=()=>{
   axios.get("http://192.168.101.11:3000/api/user/user").then((res)=>{
     setUser(res.data)
@@ -54,17 +54,26 @@ const handleDelete=(id)=>{
 }
 const  onchange=()=>{(e) => setPostImage(e)}
 
-useEffect(()=>{getUser()},[!user])
-useEffect(()=>{getPost()},[!post])
+useEffect(()=>{getUser()},[])
+useEffect(()=>{getPost()},[])
+
+
+
+
 const UserListItem = ({ user }) => {
-  // console.log("user",user);
-  
+
   return(
   <View style={styles.userItem}>
    <Image source={{uri: 'https://marketplace.canva.com/EAFPlm92N5o/1/0/800w/canva-colorful-photo-rainbow-facebook-cover-SGUjGgdTpNY.jpg'}} style={styles.avatar} />
     <Text style={styles.statusUserName} ellipsizeMode='tail' numberOfLines={1}>ali</Text>
   </View>
 );}
+
+
+
+
+
+
 const Add=()=>{
 
   const [postText,setPostText]=useState('')
@@ -82,7 +91,7 @@ const [postImage,setPostImage]=useState('')
     })
   }
   const handleAdd=()=>{
-    addPost(postText,postImage)
+    addPost(postText,postImage,userid)
   }
   return (
     <View>
@@ -96,13 +105,19 @@ const [postImage,setPostImage]=useState('')
           placeholder="image"
           onChangeText={(e) => setPostImage(e)}
         />       
-          <Button title="Add" onPress={()=>handleAdd()} />
+           <TouchableOpacity
+            style={styles.buttonContainer}
+           onPress={handleAdd}>
+        <Text >add</Text>
+      </TouchableOpacity>
     </View>
   )
 }
 
+
+
+
 const PostCard = ({ post ,user}) => {
-  console.log("user",user);
   console.log("user",user);
 return(
   <View style={styles.postCard}>
@@ -144,6 +159,10 @@ return(
     </View>
   </View>)
 }
+
+
+
+
 
 
 return (
@@ -249,6 +268,15 @@ postButton: {
 },
 postButtonText:{
   color:'#808080'
+},
+buttonContainer: {
+  height: 45,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 20,
+  width: 250,
+  borderRadius: 30,
 }
 });
 

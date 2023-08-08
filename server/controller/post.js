@@ -48,12 +48,14 @@ const deletePost=async(req,res)=>{
         console.log(err)
     }
 }
-// const getPosts=async(req,res)=>{
-//     const find=await Post.findAll({where:{id:req.params.email}})
-//     try {
-//         res.json(find)
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-    module.exports={getPost,addPost,getUserPost,updatePost,deletePost}
+const getPosts=async(req,res)=>{
+    const find=await Post.findAll({})
+    try {
+        if(id!==userid){
+            res.json(find)
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+    module.exports={getPost,addPost,getUserPost,updatePost,deletePost,getPosts}
