@@ -5,7 +5,7 @@ import axios from 'axios';
 function Deleteprod({po}) {
     console.log("po",po);
   
-    // const[refrech,setRefrech]=useState(false)
+    
     const [modalVisible, setModalVisible] = useState(false);
    
         const deletePost=(id)=>{

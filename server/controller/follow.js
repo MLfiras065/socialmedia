@@ -8,8 +8,8 @@ try {
 }
 }
 const addFriend=async(req,res)=>{
-const {theFollowedUserid}=req.body
-const add=await follo.create({theFollowedUserid})
+const {theFollowedUserid,thefollowingUserId}=req.body
+const add=await follo.create({theFollowedUserid,thefollowingUserId})
 try {
     res.json(add)
 } catch (err) {

@@ -73,7 +73,7 @@ updateUser( id,image,
     }
     const handleLogout=()=>{
       SessionStorage.removeItem('useremail')
-      log
+      
     }
      useEffect(() => {
     

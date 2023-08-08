@@ -1,6 +1,11 @@
+const User = require('../database/models/User');
 const Post=require('../database/models/post')
 const getPost=async(req,res)=>{
-    const comm=await Post.findAll({})
+    const comm=await Post.findAll({include:[{
+        model:User,
+        as:"User",
+      
+    }]})
     try {
         console.log('test');
         res.json(comm)
