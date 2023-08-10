@@ -12,7 +12,7 @@ function UpdateProd({po}) {
     // const[refrech,setRefrech]=useState(false)
     const [modalVisible, setModalVisible] = useState(false);
     const updateProd=(id)=>{
-        axios.put(`http://192.168.101.11:3000/api/prod/put/${id}`,{id,
+        axios.put(`${APP_API_URL}/prod/put/${id}`,{id,
         title:title,
         price:price,
       images:images,
@@ -28,7 +28,7 @@ function UpdateProd({po}) {
         setModalVisible(!modalVisible)
         };
         const deletePost=(id)=>{
-axios.delete(`http://192.168.101.11:3000/api/prod/del/${id}`).then((res)=>{
+axios.delete(`${APP_API_URL}/prod/del/${id}`).then((res)=>{
 
 }).catch((err)=>{
     console.log(err);

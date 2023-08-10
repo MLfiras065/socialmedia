@@ -4,7 +4,8 @@ import { StyleSheet, View, Button,Text, TextInput, FlatList, Image,Modal, Toucha
 import SessionStorage from 'react-native-session-storage';
 import axios from 'axios';
 import UpdateProd from './UpdateProd';
-// import Deleteprod from './deleteprod';
+import Deleteprod from './Deleteprod';
+
 
 const RenderItem = ({po}) => {
   const[title,setTitle]=useState('')

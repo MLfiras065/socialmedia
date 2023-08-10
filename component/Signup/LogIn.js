@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+
+import {APP_ENV,APP_API_URL} from "../../privt"
 import axios from "axios";
 import {
   StyleSheet,
@@ -22,26 +24,28 @@ function LogIn({ navigation }) {
  
   
   
-  const logIn = (email, Password) => {
+  // console.log("storage",SessionStorage);
+  const logIn = () => {
+    console.log(APP_API_URL,"api");
     axios
-      .post("http://192.168.101.11:3000/api/user/log", {
+      .get(`${APP_API_URL}/user/log`, {
         email: email,
         Password: Password,
 
       })
       .then((res) => {
         alert("login");
-        SessionStorage.setItem("email", email)
+        SessionStorage.setItem("email",email)
+
       SessionStorage.setItem('userid',id)
-      console.log("storage",SessionStorage);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         
       });
   };
   const handleLogIn = () => {
-    logIn(email, Password);
+    logIn();
     navigation.navigate("home",{screen:"Home"})
   };
 
@@ -82,7 +86,7 @@ function LogIn({ navigation }) {
 
     <TouchableOpacity
       style={[styles.buttonContainer, styles.loginButton]}
-      onPress={handleLogIn}>
+      onPress={()=>handleLogIn()}>
       <Text style={styles.loginText}>Login</Text>
     </TouchableOpacity>
 

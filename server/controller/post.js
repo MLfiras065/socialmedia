@@ -1,12 +1,14 @@
 const User = require('../database/models/User');
 const Post=require('../database/models/post')
 const getPost=async(req,res)=>{
+    
     const comm=await Post.findAll({include:[{
         model:User,
         as:"User",
       
     }]})
     try {
+        // console.log("test");
         console.log('test');
         res.json(comm)
     } catch (err) {
@@ -17,7 +19,7 @@ const getPost=async(req,res)=>{
         const added=await Post.create({
             postText:req.body.postText,
             postImage:req.body.postImage,
-            userid : req.body.userid
+            userid : req.params.userid
         })
         try {
             res.json(added)

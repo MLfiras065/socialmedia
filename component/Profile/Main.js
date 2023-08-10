@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
- import axios from "axios";
- import SessionStorage from 'react-native-session-storage';
-import { View, Text, Image, ScrollView, TouchableOpacity,Button } from 'react-native';
-function Main({navigation,route}) {
-  // const {emails}=route.params
-     const [item, setItem] = useState([]);
-    const [image, setImage] = useState("");
+import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+// import AsyncStorage from '@react-native-community/async-storage';
+import {APP_ENV,APP_API_URL} from "../../privt"
+import SessionStorage from 'react-native-session-storage';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Button,
+} from "react-native";
+function Main({ navigation, route }) {
+  const {paramkey}=route.params
+  console.log("paramkey",navigation);
+  const [item, setItem] = useState([]);
+  const [image, setImage] = useState("");
   const [coverimage, setCoverImage] = useState("");
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
@@ -15,52 +26,44 @@ function Main({navigation,route}) {
   const [gender, setGender] = useState("");
   const [DateOfBirth, setDateOfBirth] = useState("");
   const [bio, setBio] = useState("");
-   const url = "http://192.168.101.11:3000/api/user/user";
-   const useremail = SessionStorage.getItem('email')
+  const [theFollowedUserid,setTheFollowedUserid]=useState('')
+  const [theFollowingUserid,setTheFollowingUserid]=useState('')
+  const url = ` ${APP_API_URL}/user/user`;
+  const userid = SessionStorage.getItem("email");
+  console.log("datasto", userid);
   const get = async (email) => {
-    console.log("datasto",useremail);
     axios
-      .get(`http://192.168.101.11:3000/api/user/${useremail}`)
-      .then((res) => {
+    .get(`http://192.168.104.3:3000/api/user/${userid}`)
+    .then((res) => {
+        console.log("hello",res.data);
         setItem(res.data);
-        setUserName(res.data.username)
-        setBio(res.data.bio)
-        setImage(res.data.image)
-        setCoverImage(res.data.coverimage)
-        setEmail(res.data.email)
-        SessionStorage.setItem("userid",res.data.id)
-        console.log(res.data);
-
+        console.log("itemmm",item);
+        setUserName(res.data.username);
+        console.log("username",username);
+        setBio(res.data.bio);
+        setImage(res.data.image);
+        setCoverImage(res.data.coverimage);
+        setEmail(res.data.email);
+        SessionStorage.setItem("userid", res.data.id);
+        // console.log("res",res.data);
       })
       .catch((err) => console.log(err));
   };
-    const updateUser=(  id,image,
-        coverimage,
-        FirstName,
-        LastName,
-        username,
-        email,
-        Password,
-        gender,
-        DateOfBirth,
-        bio)=>{
-        axios.put(`http://192.168.101.11:3000/api/user/pd/${id}`, {image: image,
-        coverimage: coverimage,
-        FirstName: FirstName,
-        LastName: LastName,
-        username: username,
-        email: email,
-        Password: Password,
-        gender: gender,
-        DateOfBirth: DateOfBirth,
-        bio: bio}).then((res)=>{
-
-        }).catch((err)=>{
-            console.log(err);
-        })
-    }
-    const handleUpdate=(id)=>{
-updateUser( id,image,
+  const addFreind=(theFollowedUserid,userid)=>{
+    axios.post(`${APP_API_URL}/foll/add`,{
+      theFollowedUserid:theFollowedUserid,thefollowingUserId:userid
+    }).then((res)=>{
+      console.log(res.data);
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+  const handleFreind=()=>{
+    addFreind(theFollowedUserid,userid)
+  }
+  const updateUser = (
+    id,
+    image,
     coverimage,
     FirstName,
     LastName,
@@ -69,55 +72,153 @@ updateUser( id,image,
     Password,
     gender,
     DateOfBirth,
-    bio)
-    }
-    const handleLogout=()=>{
-      SessionStorage.removeItem('useremail')
-      
-    }
-     useEffect(() => {
-    
-      get();
+    bio
+  ) => {
+    axios
+      .put(`${APP_API_URL}/user/pd/${id}`, {
+        image: image,
+        coverimage: coverimage,
+        FirstName: FirstName,
+        LastName: LastName,
+        username: username,
+        email: email,
+        Password: Password,
+        gender: gender,
+        DateOfBirth: DateOfBirth,
+        bio: bio,
+      })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleUpdate = (id) => {
+    updateUser(
+      id,
+      image,
+      coverimage,
+      FirstName,
+      LastName,
+      username,
+      email,
+      Password,
+      gender,
+      DateOfBirth,
+      bio
+    );
+  };
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
+    setImage(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+  const pickCoverImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    setCoverImage(result);
+
+    if (!result.canceled) {
+      setCoverImage(result.assets[0].uri);
+    }
+  };
+  const cloudinaryUpload = (photo) => {
+    const data = new FormData();
+    data.append("file", photo);
+    data.append("upload_preset", "ogcodes");
+    data.append("cloud_name", "ogcodes");
+    fetch("https://api.cloudinary.com/v1_1/dzonlv8oi/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setImage(data.secure_url);
+      })
+      .catch((err) => {
+        Alert.alert("An Error Occured While Uploading");
+      });
+  };
+  const handleLogout = () => {
+    SessionStorage.removeItem("email");
+    SessionStorage.removeItem("userid");
+    console.log(SessionStorage,"sessionstorage");
+    console.log("logout sccsess");
+    navigation.navigate("login")
+  };
+  useEffect(() => {
+    get();
   }, []);
   return (
-    <ScrollView style={styles.container}>
-      
-        <View style={styles.headerContainer}>
-        
-        <Image
-          style={styles.coverPhoto}
-          source={{uri: 'https://marketplace.canva.com/EAFPlm92N5o/1/0/800w/canva-colorful-photo-rainbow-facebook-cover-SGUjGgdTpNY.jpg'}}
-        />
-        <View style={styles.profileContainer}>
+<ScrollView style={styles.container}>
+  <View style={styles.headerContainer}>
+    {userid === paramkey && (
+      <View style={styles.buttonContainer}>
+        <Button title="Pick an image from camera roll" onPress={pickCoverImage} />
+        {coverimage && (
           <Image
-            style={styles.profilePhoto}
-            source={{uri: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}}
+            source={{ uri: coverimage }}
+            style={styles.coverPhoto}
           />
-          <Text style={styles.nameText}
-          >Username:{username}</Text>
-        </View>
+        )}
       </View>
-      <View style={styles.bioContainer}>
-        <Text style={styles.bioText}>
-        Bio:{bio}
-        </Text>
-      </View>
-      <View style={styles.statsContainer}>
-        <View style={styles.statContainer}>
-          <Text style={styles.statCount}>{item.length}</Text>
-          <Text style={styles.statLabel}>Posts</Text>
-          <Button
-          title=" posts"
-          
-          onPress={() =>
-            navigation.navigate('Users', {
-              paramKey:useremail,
-            })
-          }
-        />
+   )} 
+    <View style={styles.profileContainer}>
+      {userid === paramkey ? (
+        <View style={styles.buttonContainer}>
+          <Button title="Pick an image from camera roll" onPress={pickImage} />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 200, height: 200 }}
+            />
+          )}
         </View>
-        <View style={styles.statContainer}>
+       ):null} 
+      <Text style={styles.nameText}>Username:{username}</Text>
+    </View>
+  </View>
+  <View style={styles.bioContainer}>
+    <Text style={styles.bioText}>Bio: {bio}</Text>
+  </View>
+  <View style={styles.statsContainer}>
+    <View style={styles.statContainer}>
+      <Text style={styles.statCount}>post</Text>
+      <Text style={styles.statLabel}>Posts</Text>
+      <Button
+        title=" posts"
+        onPress={() =>
+          navigation.navigate("Users", {
+            paramKey: userid,
+          })
+        }
+      />
+    </View>
+    <View style={styles.statContainer}>
+      <Text style={styles.statCount}>5678</Text>
+      <Text style={styles.statLabel}>Followers</Text>
+    </View>
+    <View style={styles.statContainer}>
+      <Text style={styles.statCount}>9101</Text>
+      <Text style={styles.statLabel}>Following</Text>
+    </View>
+  </View>
+  {userid !== paramkey ? (
+    <View>
+      <View style={styles.statContainer}>
           <Text style={styles.statCount}>5678</Text>
           <Text style={styles.statLabel}>Followers</Text>
         </View>
@@ -125,73 +226,85 @@ updateUser( id,image,
           <Text style={styles.statCount}>9101</Text>
           <Text style={styles.statLabel}>Following</Text>
         </View>
-      </View>
-   <Button title="logout" onPress={()=>handleLogout()}/>
-    </ScrollView>
-  )
+    </View>
+   ) : ( 
+        <Button title="add friend" onPress={() => handleFreind()} />
+   )} 
+  <Button title="logout" onPress={() => handleLogout()} />
+</ScrollView>
+  );
 }
 
 const styles = {
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-    headerContainer: {
-      alignItems: 'center',
-    },
-    coverPhoto: {
-      width: '100%',
-      height: 200,
-    },
-    profileContainer: {
-      alignItems: 'center',
-      marginTop: -50,
-    },
-    profilePhoto: {
-      width: 100,
-      height: 100,
-      borderRadius: 50,
-    },
-    nameText: {
-        color:"black",
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: 10,
-    },
-    bioContainer: {
-      padding: 15,
-    },
-    bioText: {
-        color:"black",
-      fontSize: 16,
-    },
-    statsContainer: {
-      flexDirection: 'row',
-      marginTop: 20,
-      marginBottom: 20,
-    },
-    statContainer: {
-      alignItems: 'center',
-      flex: 1,
-    },
-    statCount: {
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    statLabel: {
-      fontSize: 16,
-      color: '#999',
-    },
-    button: {
-      backgroundColor: '#B0C4DE',
-      borderRadius: 5,
-      padding: 10,
-      marginHorizontal: 20,
-    },
-    buttonText: {
-      fontSize: 16,
-      color: '#fff',
-      textAlign: 'center',
-    },
-  };
-export default Main
+  buttonContainer: {
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  headerContainer: {
+    alignItems: "center",
+  },
+  coverPhoto: {
+    width: "100%",
+    height: 200,
+  },
+  profileContainer: {
+    alignItems: "center",
+    marginTop: -50,
+  },
+  profilePhoto: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  nameText: {
+    color: "black",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  bioContainer: {
+    padding: 15,
+  },
+  bioText: {
+    color: "black",
+    fontSize: 16,
+  },
+  statsContainer: {
+    flexDirection: "row",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  statContainer: {
+    alignItems: "center",
+    flex: 1,
+  },
+  statCount: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  statLabel: {
+    fontSize: 16,
+    color: "#999",
+  },
+  button: {
+    backgroundColor: "#B0C4DE",
+    borderRadius: 5,
+    padding: 10,
+    marginHorizontal: 20,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "#fff",
+    textAlign: "center",
+  },
+};
+export default Main;

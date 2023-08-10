@@ -13,7 +13,7 @@ const [postImage,setPostImage]=useState('')
 console.log("postuser",post);
 const get =async()=>{
   const userid = SessionStorage.getItem('userid')
-const posts=await axios.get(`http://192.168.101.11:3000/api/post/get/${userid}`)
+const posts=await axios.get(`${APP_API_URL}/post/get/${userid}`)
 try {
     console.log("posts",posts.data);
  setPost(posts.data)   

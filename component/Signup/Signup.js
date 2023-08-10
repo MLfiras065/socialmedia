@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import {APP_ENV,APP_API_URL} from "../../privt"
 // import { storage } from "./config";
 
 import { Button, Image, View, Platform , TextInput, TouchableOpacity,Text} from 'react-native';
@@ -39,7 +39,7 @@ function Signup() {
     bio
   ) => {
     axios
-      .post("http://192.168.101.11:3000/api/user/reg", {
+      .post(`${APP_API_URL}/user/reg`, {
         image: image,
         coverimage: coverimage,
         FirstName: FirstName,
@@ -78,35 +78,35 @@ function Signup() {
     );
   };
 
-  //   const pickImage = async () => {
+    const pickImage = async () => {
   
-  //    let result = await ImagePicker.launchImageLibraryAsync({
-  //      mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //      allowsEditing: true,
-  //      aspect: [4, 3],
-  //      quality: 1,
-  //    });
+     let result = await ImagePicker.launchImageLibraryAsync({
+       mediaTypes: ImagePicker.MediaTypeOptions.All,
+       allowsEditing: true,
+       aspect: [4, 3],
+       quality: 1,
+     });
 
-  //    console.log(result);
+     console.log(result);
 
-  //    if (!result.canceled) {
-  //      setImage(result.assets[0].uri);
-  //    }
-  //  };
-  // const uploadeImage = async () => {
-  //   const resp = await fetch(image.uri)
-  //   const blob = await resp.blob()
-  //   const filename = image.uri.substring(image.uri.lastIndexOf("/") + 1)
-  //   var ref = storage.storage().ref().child(filename).put(blob)
-  //   try {
-  //     await ref
-  //   }
-  //   catch (err) {
-  //     console.log(err);
-  //   }
-  //   alert("upload")
-  //   setImage(null)
-  // }
+     if (!result.canceled) {
+       setImage(result.assets[0].uri);
+     }
+   };
+  const uploadeImage = async () => {
+    const resp = await fetch(image.uri)
+    const blob = await resp.blob()
+    const filename = image.uri.substring(image.uri.lastIndexOf("/") + 1)
+    var ref = storage.storage().ref().child(filename).put(blob)
+    try {
+      await ref
+    }
+    catch (err) {
+      console.log(err);
+    }
+    alert("upload")
+    setImage(null)
+  }
   return (
     (
       <View style={styles.container}>

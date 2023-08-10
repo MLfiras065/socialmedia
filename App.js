@@ -10,6 +10,7 @@ import Main from './component/Profile/Main';
 import Users from './component/Profile/Users';
 import Home from './component/Home/Home';
 import Shop from './component/Shop/Shop';
+import PostCard from './component/Home/PostCard';
 
 
 export default function App() {
@@ -25,6 +26,7 @@ const Stack = createNativeStackNavigator();
       <Stack.Screen name="Users" component={Users} />
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen name="shop" component={Shop} />
+      <Stack.Screen name="postcard" component={PostCard} />
     </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import { APP_ENV, APP_API_URL } from '../../privt';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput} from 'react-native';
 import SessionStorage from 'react-native-session-storage';
 import axios from 'axios';
@@ -9,7 +10,7 @@ function Deleteprod({po}) {
     const [modalVisible, setModalVisible] = useState(false);
    
         const deletePost=(id)=>{
-axios.delete(`http://192.168.101.11:3000/api/prod/del/${id}`).then((res)=>{
+axios.delete(`${APP_API_URL}/prod/del/${id}`).then((res)=>{
 
 }).catch((err)=>{
     console.log(err);
