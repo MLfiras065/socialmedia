@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-
-import {APP_ENV,APP_API_URL} from "../../privt"
 import axios from "axios";
+import SessionStorage from 'react-native-session-storage';
+import {APP_API_URL} from "../../privt"
 import {
   StyleSheet,
   Text,
@@ -9,50 +9,43 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Alert,
   Button
 } from 'react-native'
-import SessionStorage from 'react-native-session-storage';
-
-
 
 function LogIn({ navigation }) {
 
   const [email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
-  
  
-  
-  
-  // console.log("storage",SessionStorage);
-  const logIn = () => {
+  const logIn = async() => {
     console.log(APP_API_URL,"api");
-    axios
-      .get(`${APP_API_URL}/user/log`, {
-        email: email,
-        Password: Password,
-
+    console.log("session",SessionStorage.setItem());
+  
+      try {
+        const res= await axios.post(`${APP_API_URL}/user/log/${email}`, {
+        Password:Password
       })
-      .then((res) => {
         alert("login");
+        console.log("async",res.data);
         SessionStorage.setItem("email",email)
-
-      SessionStorage.setItem('userid',id)
-      })
-      .catch((err) => {
-        console.error(err);
-        
-      });
+         SessionStorage.setItem('usersid',res.data.id)
+      } catch (err) {
+        console.error(err)
+      }
+     
   };
+  
   const handleLogIn = () => {
     logIn();
     navigation.navigate("home",{screen:"Home"})
+   
   };
 
   const onPress = () => navigation.navigate("signup", { screen: "Signup" });
   const onPressprofile = () => navigation.navigate("profile", { screen: "Main" });
   const onPresshome = () => navigation.navigate("home", { screen: "Home" });
   const onPressShop = () => navigation.navigate("shop", { screen: "Shop" });
+  const onPressMessa = () => navigation.navigate("messa", { screen: "AllMessages" });
  
   return (
     <View style={styles.container}>
@@ -63,6 +56,7 @@ function LogIn({ navigation }) {
       />
       <TextInput
         style={styles.inputs}
+        defaultValue={email}
         placeholder="Email"
         keyboardType="email-address"
         underlineColorAndroid="transparent"
@@ -77,6 +71,7 @@ function LogIn({ navigation }) {
       />
       <TextInput
         style={styles.inputs}
+        defaultValue={Password}
         placeholder="Password"
         secureTextEntry={true}
         underlineColorAndroid="transparent"
@@ -105,6 +100,7 @@ function LogIn({ navigation }) {
         <Button title="profile" onPress={onPressprofile} />
         <Button title="home" onPress={onPresshome} />
         <Button title="shop" onPress={onPressShop} />
+        <Button title="shop" onPress={onPressMessa} />
   </View>
         
         

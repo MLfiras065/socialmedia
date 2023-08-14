@@ -42,7 +42,8 @@ const getUserEmail=async(req,res)=>{
   }
 }
 const login=(req,res)=>{
-    User.findOne({ where: { email: req.body.email } }).then((user) => {
+  console.log(req.body,"req.body");
+    User.findOne({ where: { email: req.params.email } }).then((user) => {
         bcrypt
           .compare(req.body.Password,user.Password)
           .then((passCheck) => {
@@ -58,7 +59,7 @@ const login=(req,res)=>{
             //   { expireIn: "24h" }
             );
             
-            res.status(200).json({ email: user.email,token:token });
+            res.status(200).json({ email: user.email,token:token,id:user.id });
           })
           .catch((err) => {
             console.log(err);
@@ -74,7 +75,8 @@ const updateUser=async(req,res)=>{
     email:req.body.email,
     DateOfBirth:req.body.DateOfBirth,
     gender:req.body.gender,
-    bio:req.body.bio},{ where: { id: req.params.id } })
+    bio:req.body.bio},
+    { where: { id: req.params.id } })
     try {
      res.json(updeted)
     } catch (err) {

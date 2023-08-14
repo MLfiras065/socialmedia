@@ -1,5 +1,6 @@
 const express = require("express");
 const sequelize=require("./database/db")
+
 const  cors = require('cors')
 
 const commen=require('./routes/comment.router')

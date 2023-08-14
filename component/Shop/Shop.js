@@ -3,7 +3,7 @@ import Porduct from "../Shop/Product";
 import {APP_ENV,APP_API_URL} from "../../privt"
 import AddProd from "./AddProd";
 import UpdateProd from "./UpdateProd";
-import { StyleSheet, ScrollView, View } from "react-native";
+import { StyleSheet, ScrollView, View ,Button} from "react-native";
 import axios from "axios";
 
 const Shop = () => {

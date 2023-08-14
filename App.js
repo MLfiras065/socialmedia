@@ -11,10 +11,11 @@ import Users from './component/Profile/Users';
 import Home from './component/Home/Home';
 import Shop from './component/Shop/Shop';
 import PostCard from './component/Home/PostCard';
-
-
+import AllMessages from './component/chat/AllMessages';
+import AddComment from './component/Home/AddComment';
+import CommentCard from './component/Home/CommentCard';
 export default function App() {
-  
+
 const Stack = createNativeStackNavigator();
 
   return (
@@ -27,6 +28,9 @@ const Stack = createNativeStackNavigator();
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen name="shop" component={Shop} />
       <Stack.Screen name="postcard" component={PostCard} />
+      <Stack.Screen name="messa" component={AllMessages} />
+      <Stack.Screen name="AddComment" component={AddComment} />
+      <Stack.Screen name="commentcard" component={CommentCard} />
     </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,11 @@
 const comment=require("../database/models/comment")
-
+const Post=require('../database/models/post')
 
 const getComment=async(req,res)=>{
-const comm=await comment.findAll({})
+const comm=await comment.findAll({include:[{
+    model:Post,
+    as:"Post"
+}]})
 try {
     console.log('test');
     res.json(comm)
@@ -11,8 +14,11 @@ try {
 }
 }
 const addcomm=async(req,res)=>{
-    const {content,image}=req.body
-    const addC=await comment.create({content,image})
+    
+    const addC=await comment.create({
+        content:req.body.content,
+        image:req.body.image,
+        userid:req.params.userid})
     try {
         res.json(addC)
     } catch (err) {

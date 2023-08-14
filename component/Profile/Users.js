@@ -20,7 +20,7 @@ try {
  setPostText(posts.data.postText)
  setPostImage(posts.data.postImage)
 } catch (err) {
-    console.log(err);
+    console.log("users",err);
 }
 }
 

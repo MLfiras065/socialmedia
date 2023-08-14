@@ -15,16 +15,26 @@ import {
 } from "react-native";
 import SessionStorage from "react-native-session-storage";
 
-function AddPost({ post }) {
-  const [postText, setPostText] = useState("");
-  const [postImage, setPostImage] = useState("");
+function AddComment({navigation,route}) {
+    const [comment,setComment]=useState([])
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState("");
+  const paramkey=route.params.post
   const usersid = SessionStorage.getItem("usersid");
  console.log("userid",usersid);
-  const addPost = (postText,postImage) => {
+ const getComm=()=>{
+    axios.get(`${APP_API_URL}/comm`).then((res)=>{
+
+      
+    }).catch((err)=>{
+        console.log(err);
+    })
+ }
+  const addComm = (content,image) => {
     axios
-      .post(`${APP_API_URL}/post/addpost/${usersid}`, {
-        postText:postText,
-        postImage:postImage,
+      .post(`${APP_API_URL}/comm/add/${usersid}`, {
+        content:content,
+        image:image,
       })
       .then((res) => {
         console.log("res", res);
@@ -35,7 +45,7 @@ function AddPost({ post }) {
       });
   };
   const handleAdd = () => {
-    addPost(postText,postImage);
+    addComm(content,image);
   };
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -45,10 +55,10 @@ function AddPost({ post }) {
       quality: 1,
     });
 
-    setPostImage(result);
+    setImage(result);
 
     if (!result.canceled) {
-      setPostImage(result.assets[0].uri);
+      setImage(result.assets[0].uri);
     }
   };
   const cloudinaryUpload = (photo) => {
@@ -62,7 +72,7 @@ function AddPost({ post }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        setPostImage(data.secure_url);
+        setImage(data.secure_url);
       })
       .catch((err) => {
         Alert.alert("An Error Occured While Uploading");
@@ -70,33 +80,79 @@ function AddPost({ post }) {
   };
   return (
     <View>
-      <TextInput
-        defaultValue={post.postText}
-        placeholder="text"
-        onChangeText={(e) => setPostText(e)}
-      />
-      <View style={styles.buttonContainer}>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-        {postImage && (
-          <Image
-            source={{ uri: post.postImage }}
-            style={{ width: 200, height: 200 }}
-          />
-        )}
-      </View>
-
-      <TextInput placeholder="image" onChangeText={(e) => setPostImage(e)} />
-
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleAdd}>
-        <Text>add</Text>
-      </TouchableOpacity>
+     <View style={styles.footer}>
+   
+        <View>
+        <TouchableOpacity 
+        onPress={pickImage}
+        style={styles.btnSend}>
+              <Image
+                source={{ uri: 'https://icons8.com/icon/53386/image' }}
+                style={styles.iconSend}
+              />
+            </TouchableOpacity>
+        </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Write a comment..."
+                underlineColorAndroid="transparent"
+                onChangeText={content => setContent({ content })}
+              />
+            </View>
+    
+            <TouchableOpacity style={styles.btnSend}>
+              <Image
+                source={{ uri: 'https://img.icons8.com/small/75/ffffff/filled-sent.png' }}
+                style={styles.iconSend}
+                onPress={handleAdd}
+              />
+            </TouchableOpacity>
+          </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
+    footer: {
+        flexDirection: 'row',
+        height: 60,
+        backgroundColor: '#eeeeee',
+        paddingHorizontal: 10,
+        padding: 5,
+      },
+      btnSend: {
+        backgroundColor: '#00BFFF',
+        width: 40,
+        height: 40,
+        borderRadius: 360,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      inputContainer: {
+        borderBottomColor: '#F5FCFF',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 30,
+        borderBottomWidth: 1,
+        height: 40,
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        marginRight: 10,
+      },
+      iconSend: {
+        width: 30,
+        height: 30,
+        alignSelf: 'center',
+      },
   container: {
     paddingTop: 60,
     paddingBottom: 120,
+  },
+  inputs: {
+    height: 40,
+    marginLeft: 16,
+    borderBottomColor: '#FFFFFF',
+    flex: 1,
   },
   modal: {
     padding: 25,
@@ -189,4 +245,4 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
-export default AddPost;
+export default AddComment;

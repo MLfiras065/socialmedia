@@ -8,7 +8,6 @@ const getPost=async(req,res)=>{
       
     }]})
     try {
-        // console.log("test");
         console.log('test');
         res.json(comm)
     } catch (err) {
@@ -16,12 +15,14 @@ const getPost=async(req,res)=>{
     }
     }
     const addPost=async(req,res)=>{
+        console.log(req.params.userid);
         const added=await Post.create({
             postText:req.body.postText,
             postImage:req.body.postImage,
-            userid : req.params.userid
+             userid:req.params.userid
         })
         try {
+            console.log(added,"testtttt");
             res.json(added)
         } catch (err) {
             console.log(err);

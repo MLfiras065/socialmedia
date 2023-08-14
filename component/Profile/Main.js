@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
-// import AsyncStorage from '@react-native-community/async-storage';
-import {APP_ENV,APP_API_URL} from "../../privt"
+import {APP_API_URL} from "../../privt"
 import SessionStorage from 'react-native-session-storage';
 import {
   View,
@@ -13,8 +12,9 @@ import {
   Button,
 } from "react-native";
 function Main({ navigation, route }) {
-  const {paramkey}=route.params
-  console.log("paramkey",navigation);
+  console.log("route",route);
+  const paramkey=route.params.post
+  console.log("paramkey",paramkey);
   const [item, setItem] = useState([]);
   const [image, setImage] = useState("");
   const [coverimage, setCoverImage] = useState("");
@@ -29,29 +29,32 @@ function Main({ navigation, route }) {
   const [theFollowedUserid,setTheFollowedUserid]=useState('')
   const [theFollowingUserid,setTheFollowingUserid]=useState('')
   const url = ` ${APP_API_URL}/user/user`;
-  const userid = SessionStorage.getItem("email");
+  const emailuser = SessionStorage.getItem("email");
+  const userid = SessionStorage.getItem("userid");
   console.log("datasto", userid);
-  const get = async (email) => {
+
+ 
+  console.log("sessionstorage",SessionStorage);
+  const get = async () => {
     axios
-    .get(`http://192.168.104.3:3000/api/user/${userid}`)
+    .get(`http://192.168.104.3:3000/api/user/${emailuser}`)
     .then((res) => {
-        console.log("hello",res.data);
+
         setItem(res.data);
-        console.log("itemmm",item);
         setUserName(res.data.username);
-        console.log("username",username);
         setBio(res.data.bio);
         setImage(res.data.image);
         setCoverImage(res.data.coverimage);
         setEmail(res.data.email);
         SessionStorage.setItem("userid", res.data.id);
-        // console.log("res",res.data);
+      
       })
       .catch((err) => console.log(err));
   };
   const addFreind=(theFollowedUserid,userid)=>{
     axios.post(`${APP_API_URL}/foll/add`,{
-      theFollowedUserid:theFollowedUserid,thefollowingUserId:userid
+      theFollowedUserid:paramkey,
+      thefollowingUserId:userid
     }).then((res)=>{
       console.log(res.data);
     }).catch((err)=>{
@@ -59,7 +62,7 @@ function Main({ navigation, route }) {
     })
   }
   const handleFreind=()=>{
-    addFreind(theFollowedUserid,userid)
+    addFreind(theFollowedUserid,userid) 
   }
   const updateUser = (
     id,
@@ -163,9 +166,9 @@ function Main({ navigation, route }) {
     get();
   }, []);
   return (
-<ScrollView style={styles.container}>
+    <ScrollView style={styles.container}>
+    {userid === route.params.post && (
   <View style={styles.headerContainer}>
-    {userid === paramkey && (
       <View style={styles.buttonContainer}>
         <Button title="Pick an image from camera roll" onPress={pickCoverImage} />
         {coverimage && (
@@ -175,22 +178,20 @@ function Main({ navigation, route }) {
           />
         )}
       </View>
-   )} 
     <View style={styles.profileContainer}>
-      {userid === paramkey ? (
+      
         <View style={styles.buttonContainer}>
           <Button title="Pick an image from camera roll" onPress={pickImage} />
           {image && (
             <Image
-              source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
+            source={{ uri: image }}
+            style={{ width: 200, height: 200 }}
             />
           )}
         </View>
-       ):null} 
-      <Text style={styles.nameText}>Username:{username}</Text>
+       
     </View>
-  </View>
+    <Text style={styles.nameText}>Username:{username}</Text>
   <View style={styles.bioContainer}>
     <Text style={styles.bioText}>Bio: {bio}</Text>
   </View>
@@ -216,19 +217,17 @@ function Main({ navigation, route }) {
       <Text style={styles.statLabel}>Following</Text>
     </View>
   </View>
-  {userid !== paramkey ? (
+  </View>
+    )} 
+      
+  {userid !== route.params.post ? (
     <View>
-      <View style={styles.statContainer}>
-          <Text style={styles.statCount}>5678</Text>
-          <Text style={styles.statLabel}>Followers</Text>
-        </View>
-        <View style={styles.statContainer}>
-          <Text style={styles.statCount}>9101</Text>
-          <Text style={styles.statLabel}>Following</Text>
-        </View>
+    
+      <Button title="add friend" onPress={() => handleFreind()} />
     </View>
-   ) : ( 
-        <Button title="add friend" onPress={() => handleFreind()} />
+   ) : ( <View>
+
+   </View>
    )} 
   <Button title="logout" onPress={() => handleLogout()} />
 </ScrollView>

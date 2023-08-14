@@ -10,6 +10,7 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
+  Button
 } from "react-native";
 import SessionStorage from "react-native-session-storage";
 import axios from "axios";

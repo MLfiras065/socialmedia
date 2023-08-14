@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import { APP_ENV, APP_API_URL } from '@env';
+import { APP_API_URL } from '../../privt';
 import axios from "axios";
 import {
   View,
@@ -17,9 +17,7 @@ import SessionStorage from "react-native-session-storage";
 
 
 function PostCard({ post, navigation}) {
-console.log("post",post);
-console.log("api",APP_API_URL );
- console.log("nav",navigation);
+console.log("posts",post);
   const [postText, setPostText] = useState("");
   const [postImage, setPostImage] = useState("");
   const userid = SessionStorage.getItem("userid");
@@ -38,7 +36,7 @@ console.log("api",APP_API_URL );
   };
   const deletePost = (id) => {
     axios
-      .delete(`${APP_API_URL}/api/post/del/${id}`)
+      .delete(`${APP_API_URL}/post/del/${id}`)
       .then((res) => {
         console.log("hi");
       })
@@ -63,8 +61,10 @@ console.log("api",APP_API_URL );
       <View style={styles.postHeader}>
        
     <TouchableOpacity   onPress={() =>
-              navigation.navigate("profile",
-              {paramkey:post.User.userid})
+              
+              navigation.navigate({name:"profile",
+
+              params:{post:post.User.id}})
             }
             >
         <Image
@@ -72,7 +72,6 @@ console.log("api",APP_API_URL );
             uri: post.postImage,
           }}
           style={styles.postAvatar}
-        
         />
         </TouchableOpacity>
         <Text style={styles.postUsername}>{post.username}</Text>
@@ -81,7 +80,7 @@ console.log("api",APP_API_URL );
         <View style={{ flex: 1 }}>
           <TextInput placeholder="text" onChangeText={(e) => setPostText(e)} />
           <TextInput placeholder="email" onChangeText={onchange} />
-          <Button title="update" onPress={(id) => handelUpdate(post.id)} />
+          <Button title="update" onPress={() => handelUpdate(post.id)} />
           <TouchableOpacity
             style={styles.postButton}
             onPress={(id) => handleDelete(post.id)}
@@ -103,7 +102,14 @@ console.log("api",APP_API_URL );
         <TouchableOpacity style={styles.postButton}>
           <Text style={styles.postButtonText}>Like</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.postButton}>
+        <TouchableOpacity  
+        onPress={() =>
+              
+          navigation.navigate({name:"commentcard",
+
+          params:{post:post.id}})
+        } 
+        style={styles.postButton}>
           <Text style={styles.postButtonText}>Comment</Text>
         </TouchableOpacity>
       </View>
