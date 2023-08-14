@@ -2,10 +2,7 @@ const comment=require("../database/models/comment")
 const Post=require('../database/models/post')
 
 const getComment=async(req,res)=>{
-const comm=await comment.findAll({include:[{
-    model:Post,
-    as:"Post"
-}]})
+const comm=await comment.findAll({where:{postid:req.params.postid}})
 try {
     console.log('test');
     res.json(comm)
@@ -18,7 +15,8 @@ const addcomm=async(req,res)=>{
     const addC=await comment.create({
         content:req.body.content,
         image:req.body.image,
-        userid:req.params.userid})
+        userid:req.params.userid,
+    postid:req.params.postid})
     try {
         res.json(addC)
     } catch (err) {

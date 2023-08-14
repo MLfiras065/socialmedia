@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import {APP_API_URL} from "../../privt"
 import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
 import AddComment from './AddComment'
 
 const CommentCard = ({navigation,route}) => {
-     const paramkey=route.params.post
-  const [comment,setComment]=useState([])
-  const [content, setContent] = useState("");
+      const paramkey=route.params.post
+      console.log("paramkey",paramkey);
+      const [comment,setComment]=useState([])
+      const [content, setContent] = useState("");
       const [image, setImage] = useState("");
+
   const getComm=()=>{
     axios.get(`${APP_API_URL}/comm/${paramkey}`).then((res)=>{
       setComment(res.data)
       setContent(res.data.content)
       setImage(res.data.image)
+    
       
     }).catch((err)=>{
         console.log(err);
     })
  }
- useEffect(()=>{getComm()},[comment])
+ useEffect(()=>{getComm()},[])
   return (
     <View>
     <FlatList
       style={styles.root}
       data={comment}
-    //   extraData={state}
+    
       ItemSeparatorComponent={() => {
         return <View style={styles.separator} />
       }}
@@ -34,7 +39,7 @@ const CommentCard = ({navigation,route}) => {
       
         return (
           <View style={styles.container}>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity >
               <Image style={styles.image} source={{ uri: item.image }} />
             </TouchableOpacity>
             <View style={styles.content}>
@@ -48,7 +53,7 @@ const CommentCard = ({navigation,route}) => {
         )
       }}
     />
-    <AddComment/>
+    <AddComment comm={comment} paramk={paramkey} navigation={navigation}/>
 </View>
   )
 }

@@ -12,7 +12,11 @@ const comment = sequelize.define("comment", {
     },
     userid:{
       type:DataTypes.INTEGER
+    },
+    postid:{
+      type:DataTypes.INTEGER
     }
+
   });
   Post.hasMany(comment,{foreignKey:"commentid",as:"Post"})
   comment.belongsTo(Post,{foreignKey:"commentid",as:"Post"})

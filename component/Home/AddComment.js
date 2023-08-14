@@ -1,44 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {APP_ENV,APP_API_URL} from "../../privt"
+import {APP_API_URL} from "../../privt"
 import * as ImagePicker from "expo-image-picker";
 import {
   View,
   Text,
-  ScrollView,
   Image,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
-  Button,
   TextInput,
+  // Button
 } from "react-native";
 import SessionStorage from "react-native-session-storage";
 
-function AddComment({navigation,route}) {
-    const [comment,setComment]=useState([])
+function AddComment({comm,route,paramk}) {
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
-  const paramkey=route.params.post
+  const param=paramk
   const usersid = SessionStorage.getItem("usersid");
  console.log("userid",usersid);
- const getComm=()=>{
-    axios.get(`${APP_API_URL}/comm`).then((res)=>{
 
-      
-    }).catch((err)=>{
-        console.log(err);
-    })
- }
   const addComm = (content,image) => {
     axios
-      .post(`${APP_API_URL}/comm/add/${usersid}`, {
+      .post(`${APP_API_URL}/comm/add/${usersid}/${param}`, {
         content:content,
         image:image,
       })
       .then((res) => {
-        console.log("res", res);
-        console.log("eyyyy");
+        console.log("res", res.data);
+        console.log("added");
       })
       .catch((err) => {
         console.log(err);
@@ -94,20 +84,24 @@ function AddComment({navigation,route}) {
         </View>
             <View style={styles.inputContainer}>
               <TextInput
+              value={comm.content}
                 style={styles.inputs}
                 placeholder="Write a comment..."
                 underlineColorAndroid="transparent"
-                onChangeText={content => setContent({ content })}
+                onChangeText={content => setContent(content)}
               />
             </View>
     
-            <TouchableOpacity style={styles.btnSend}>
+            <TouchableOpacity 
+            onPress={()=>{handleAdd()}}
+            style={styles.btnSend}>
               <Image
                 source={{ uri: 'https://img.icons8.com/small/75/ffffff/filled-sent.png' }}
                 style={styles.iconSend}
-                onPress={handleAdd}
+                
               />
             </TouchableOpacity>
+            {/* <Button title="add"  onPress={()=>{alert("test")}}/> */}
           </View>
     </View>
   );
