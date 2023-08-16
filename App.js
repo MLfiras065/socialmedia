@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, StyleSheet, Text, View } from 'react-native';
+// import LandingPage from './component/Landingpage/LandingPage';
 import Signup from "./component/Signup/Signup"
 import LogIn from "./component/Signup/LogIn"
 import Main from './component/Profile/Main';
@@ -14,6 +15,8 @@ import PostCard from './component/Home/PostCard';
 import AllMessages from './component/chat/AllMessages';
 import AddComment from './component/Home/AddComment';
 import CommentCard from './component/Home/CommentCard';
+import Messaging from './component/chat/Messaging';
+
 export default function App() {
 
 const Stack = createNativeStackNavigator();
@@ -21,6 +24,8 @@ const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer> 
       <Stack.Navigator>
+
+      {/* <Stack.Screen name="landing" component={LandingPage}  /> */}
       <Stack.Screen name="login" component={LogIn}  />
       <Stack.Screen name="profile" component={Main}   />
       <Stack.Screen name="signup" component={Signup} />
@@ -31,6 +36,7 @@ const Stack = createNativeStackNavigator();
       <Stack.Screen name="messa" component={AllMessages} />
       <Stack.Screen name="AddComment" component={AddComment} />
       <Stack.Screen name="commentcard" component={CommentCard} />
+      <Stack.Screen name="com" component={Messaging} />
     </Stack.Navigator>
     </NavigationContainer>
   );

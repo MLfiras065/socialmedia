@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   baths: {
     fontSize: 14,
-    color: "#ffa500",
+    color: "#ff500",
     fontWeight: "bold",
   },
   parking: {

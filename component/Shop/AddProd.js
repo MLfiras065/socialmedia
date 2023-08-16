@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { APP_ENV, APP_API_URL } from '@env';
+import { APP_API_URL } from '../../privt';
 import {
   StyleSheet,
   View,
@@ -23,7 +23,7 @@ const AddProd = () => {
   const [refrech, setRefrech] = useState(false);
   const addProduct = (title, price, images, description, userid) => {
     axios
-      .post(`APP_API_URL/prod/add`, {
+      .post(`${APP_API_URL}/prod/add`, {
         title: title,
         price: price,
         images: images,

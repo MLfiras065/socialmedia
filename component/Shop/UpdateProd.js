@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import { APP_API_URL } from '../../privt';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput,Button} from 'react-native';
 import SessionStorage from 'react-native-session-storage';
 import axios from 'axios';
@@ -9,7 +10,7 @@ function UpdateProd({po}) {
     const[images,setImages]=useState('')
     const[description,setDescription]=useState('')
     const userid = SessionStorage.getItem('userid')
-    // const[refrech,setRefrech]=useState(false)
+    
     const [modalVisible, setModalVisible] = useState(false);
     const updateProd=(id)=>{
         axios.put(`${APP_API_URL}/prod/put/${id}`,{id,

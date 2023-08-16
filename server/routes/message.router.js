@@ -1,5 +1,5 @@
 const route=require("express").Router()
 const {getmess,addedMessages}=require("../controller/messages")
-route.get('/getm',getmess)
-route.post('/postMsg',addedMessages)
+route.get('/getm/:senderid/:reciverid',getmess)
+route.post('/postMsg/:senderid/:reciverid',addedMessages)
 module.exports=route
