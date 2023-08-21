@@ -44,7 +44,7 @@ function AddPost({ post }) {
       aspect: [4, 3],
       quality: 1,
     });
-
+console.log(postImage,"test");
     setPostImage(result);
 
     if (!result.canceled) {

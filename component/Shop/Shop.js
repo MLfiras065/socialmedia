@@ -24,7 +24,7 @@ const Shop = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <AddProd />
+      <AddProd  prod={poduct} />
       {poduct.map((pod) => (
         <Porduct key={pod.id} po={pod} />
       ))}

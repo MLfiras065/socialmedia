@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { APP_API_URL } from '../../privt';
+import * as ImagePicker from "expo-image-picker";
 import {
   StyleSheet,
   View,
@@ -14,7 +15,7 @@ import {
 } from "react-native";
 import SessionStorage from "react-native-session-storage";
 import axios from "axios";
-const AddProd = () => {
+const AddProd = ({prod}) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [images, setImages] = useState("");
@@ -47,7 +48,7 @@ const AddProd = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
+console.log(images,"test");
     setImages(result);
 
     if (!result.canceled) {
@@ -75,6 +76,7 @@ const AddProd = () => {
     <View>
       <TextInput
         style={styles.inputs}
+        defaultValue={prod.title}
         placeholder="title"
         onChangeText={(e) => {
           setTitle(e);
@@ -83,6 +85,7 @@ const AddProd = () => {
 
       <TextInput
         style={styles.inputs}
+        defaultValue={prod.price}
         placeholder="price"
         onChangeText={(e) => {
           setPrice(e);
@@ -90,10 +93,10 @@ const AddProd = () => {
       />
 
 <View style={styles.buttonContainer}>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        <Button title="Pick an image from camera roll" onPress={()=>pickImage()} />
         {images && (
           <Image
-            source={{ uri: images }}
+            source={{ uri: prod.images }}
             style={{ width: 200, height: 200 }}
           />
         )}
@@ -101,6 +104,7 @@ const AddProd = () => {
 
       <TextInput
         style={styles.inputs}
+        defaultValue={prod.description}
         placeholder="description"
         onChangeText={(e) => {
           setDescription(e);

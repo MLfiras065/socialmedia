@@ -21,7 +21,7 @@ const RenderItem = ({po}) => {
     return(
     
     <View style={styles.card}>
-      <Image source={{ uri:"https://source.unsplash.com/900x900/?house"}} style={styles.image} />
+      <Image source={{ uri:po.images}} style={styles.image} />
       <View style={styles.cardBody}>
         <Text
       

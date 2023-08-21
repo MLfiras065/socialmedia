@@ -175,7 +175,7 @@ function Main({ navigation, route }) {
         <Button title="Pick an image from camera roll" onPress={pickCoverImage} />
         {coverimage && (
           <Image
-            source={{ uri: coverimage }}
+            source={{ uri:"https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg" }}
             style={styles.coverPhoto}
           />
         )}
@@ -186,7 +186,7 @@ function Main({ navigation, route }) {
           <Button title="Pick an image from camera roll" onPress={pickImage} />
           {image && (
             <Image
-            source={{ uri: image }}
+            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5ybhqoQbG6Oxu5aJV2f8D2PrJLr7z1Nzst5GXhqqlbq56iEUBLsREoLCMZcsTC34D6KA&usqp=CAU" }}
             style={{ width: 200, height: 200 }}
             />
           )}
