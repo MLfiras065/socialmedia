@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
-import {APP_API_URL} from "../../privt"
+import {APP_API_URL,} from "../../privt"
 import SessionStorage from 'react-native-session-storage';
 import {
   View,
   Text,
   Image,
   ScrollView,
-  TouchableOpacity,
   Button,
 } from "react-native";
+
 function Main({ navigation, route }) {
   console.log("route",route);
   const paramkey=route.params.post
+  const paramk=route.params.email
+ 
   console.log("paramkey",paramkey);
   const [item, setItem] = useState([]);
   const [image, setImage] = useState("");
@@ -30,14 +32,14 @@ function Main({ navigation, route }) {
   const [theFollowingUserid,setTheFollowingUserid]=useState('')
   const url = ` ${APP_API_URL}/user/user`;
   const emailuser = SessionStorage.getItem("email");
-  const userid = SessionStorage.getItem("userid");
+  const userid = SessionStorage.getItem("usersid");
   console.log("datasto", userid);
 
  
-  console.log("sessionstorage",SessionStorage);
-  const get = async () => {
+  
+  const get = async (email) => {
     axios
-    .get(`http://192.168.104.3:3000/api/user/${emailuser}`)
+    .get(`${APP_API_URL}/user/${email}`)
     .then((res) => {
 
         setItem(res.data);
@@ -49,7 +51,7 @@ function Main({ navigation, route }) {
         SessionStorage.setItem("userid", res.data.id);
       
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log({err}));
   };
   const addFreind=(theFollowedUserid,userid)=>{
     axios.post(`${APP_API_URL}/foll/add`,{
@@ -163,11 +165,11 @@ function Main({ navigation, route }) {
     navigation.navigate("login")
   };
   useEffect(() => {
-    get();
+    userid===paramkey ? get(emailuser) :get(paramk)
   }, []);
   return (
     <ScrollView style={styles.container}>
-    {userid === route.params.post && (
+    {userid === paramkey && (
   <View style={styles.headerContainer}>
       <View style={styles.buttonContainer}>
         <Button title="Pick an image from camera roll" onPress={pickCoverImage} />
@@ -217,19 +219,69 @@ function Main({ navigation, route }) {
       <Text style={styles.statLabel}>Following</Text>
     </View>
   </View>
+  <Button title="logout" onPress={() => handleLogout()} />
   </View>
     )} 
       
-  {userid !== route.params.post ? (
+  {userid !== paramkey ? (
     <View>
-    
+    <View style={styles.headerContainer}>
+      <View style={styles.buttonContainer}>
+        <Button title="Pick an image from camera roll" />
+        {coverimage && (
+          <Image
+            source={{ uri: coverimage }}
+            style={styles.coverPhoto}
+          />
+        )}
+      </View>
+    <View style={styles.profileContainer}>
+      
+        <View style={styles.buttonContainer}>
+          <Button title="Pick an image from camera roll"  />
+          {image && (
+            <Image
+            source={{ uri: image }}
+            style={{ width: 200, height: 200 }}
+            />
+          )}
+        </View>
+       
+    </View>
+    <Text style={styles.nameText}>Username:{username}</Text>
+  <View style={styles.bioContainer}>
+    <Text style={styles.bioText}>Bio: {bio}</Text>
+  </View>
+  <View style={styles.statsContainer}>
+    <View style={styles.statContainer}>
+      <Text style={styles.statCount}>post</Text>
+      <Text style={styles.statLabel}>Posts</Text>
+      <Button
+        title=" posts"
+        onPress={() =>
+          navigation.navigate("Users", {
+            paramKey: userid,
+          })
+        }
+      />
+    </View>
+    <View style={styles.statContainer}>
+      <Text style={styles.statCount}>5678</Text>
+      <Text style={styles.statLabel}>Followers</Text>
+    </View>
+    <View style={styles.statContainer}>
+      <Text style={styles.statCount}>9101</Text>
+      <Text style={styles.statLabel}>Following</Text>
+    </View>
+  </View>
+  </View>
       <Button title="add friend" onPress={() => handleFreind()} />
+      {/* <Button title="add friend" onPress={navigation.navigate("messa", { : parmk })} /> */}
     </View>
    ) : ( <View>
 
    </View>
    )} 
-  <Button title="logout" onPress={() => handleLogout()} />
 </ScrollView>
   );
 }

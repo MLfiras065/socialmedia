@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+
 const sequelize = require('../db');
 const follow=sequelize.define('follow',{
     theFollowedUserid:{

@@ -18,13 +18,13 @@ function LogIn({ navigation }) {
   const [Password, setPassword] = useState("");
  
   const logIn = async() => {
-    console.log(APP_API_URL,"api");
-    console.log("session",SessionStorage.setItem());
+   
   
       try {
         const res= await axios.post(`${APP_API_URL}/user/log/${email}`, {
         Password:Password
       })
+      
         alert("login");
         console.log("async",res.data);
         SessionStorage.setItem("email",email)

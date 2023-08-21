@@ -32,10 +32,11 @@ user.save().then((result)=>{
 } 
 
 const getUserEmail=async(req,res)=>{
-  const userEmail=await User.findOne({
-    where:{email:req.params.email}
-  })
+  console.log("testttssssss");
   try {
+    const userEmail=await User.findOne({
+      where:{email:req.params.email}
+    })
     res.json(userEmail)
   } catch (err) {
     console.log(err)

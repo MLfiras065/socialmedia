@@ -1,54 +1,48 @@
-import React, { useLayoutEffect, useState,useEffect } from "react";
+import React, { useState,useEffect } from "react";
+import { View, TextInput, Text, FlatList, Pressable,StyleSheet,TouchableOpacity,Image} from "react-native";
 import axios from "axios";
-import { View, TextInput, Text, FlatList, Pressable,StyleSheet} from "react-native";
+import { APP_API_URL } from '../../privt';
 import SessionStorage from "react-native-session-storage";
 import MessageComponent from "./MessageComponent";
-import { APP_API_URL } from '../../privt';
+import {io} from 'socket.io-client';
+
 
 const Messaging = ({ route,item }) => {
-    // const userid=SessionStorage.getItem('usersid')
-    // const param=route.userid.userid
+    const userid=JSON.stringify(SessionStorage.getItem('usersid'))
+    const param=route.params.userid
+    console.log("param",param);
     const [content,setContent]=useState('')
+    const [socket,setSocket]=useState()
+    const [chatMessages, setChatMessages] = useState([]);
+    console.log("testttt",content);
     
-    const [chatMessages, setChatMessages] = useState([
-        {
-            id: "1",
-            text: "Hello guys, welcome!",
-            time: "07:50",
-            user: "Tomer",
-        },
-        {
-            id: "2",
-            text: "Hi Tomer, thank you! 😇",
-            time: "08:50",
-            user: "David",
-        },
-    ]);
-    const [message,setMessage]=useState([])
     const getMessage=()=> {
-        axios.get(``).then((res)=>{
-            setMessage(res.data)
+      
+        axios.get(`${APP_API_URL}/message/getm/${userid}/${param}`).then((res)=>{
+            setChatMessages(res.data)
+            console.log("res=>",res.data);
         }).catch((err)=>{console.log(err)
         })
     }
-    // const [message, setMessage] = useState("");
-    // const [user, setUser] = useState("");
-
-    // const { name, id } = route.params;
-    
-    const addMessage=(content)=>{
+  
+    const addsMessage=(content)=>{
+        console.log(socket,"socket");
+        socket.emit("send-message", content)
+        let x=socket.emit('send-message',content)
+        console.log("x=>",x);
 axios.post(`${APP_API_URL}/message/postMsg/${userid}/${param}`,{
     content:content,
-    
+    })
+    .then((res)=>{
+        setChatMessages()
 
-}).then((res)=>{
-    console.log("resmessage",res.data);
-}).cacth((err)=>{
+    })
+.catch((err)=>{
     console.log(err);
 })
     }
-    const handleAdd=(content)=>{
-        addMessage(content)
+    const handleAdd=()=>{
+        addsMessage(content)
     }
  
     const handleNewMessage = () => {
@@ -64,29 +58,35 @@ axios.post(`${APP_API_URL}/message/postMsg/${userid}/${param}`,{
 
         console.log({
             message,
-            user,
+        
             timestamp: { hour, mins },
         });
     };
 
-//     useEffect(()=>{
-//         getMessage()
-// socket.on(("roomList",roomchat=>setMessage(roomchat)))
-//     },[socket])
+    useEffect(()=>{
+        try {
+            setSocket( io("http://192.168.104.7:4000"))
+            console.log("socket=>",socket);} 
+           
+            catch (error) {
+                console.log(error);
+            }
+            getMessage()
+    },[])
 
     return (
         <View style={styles.messagingscreen}>
             <View
                 style={[
                     styles.messagingscreen,
-                    { paddingVertical: 15, paddingHorizontal: 10 },
+                    { paddingVertical: 15, paddingHorizontal: 10 ,color:'black'},
                 ]}
             >
-                {message[0] ? (
+                {chatMessages ? (
                     <FlatList
-                        data={message}
+                        data={chatMessages}
                         renderItem={({ item }) => (
-                            <MessageComponent item={item} user={user} />
+                            <MessageComponent item={item}  />
                         )}
                         keyExtractor={(item) => item.id}
                     />
@@ -97,12 +97,14 @@ axios.post(`${APP_API_URL}/message/postMsg/${userid}/${param}`,{
 
             <View style={styles.messaginginputContainer}>
                 <TextInput
+                        value={content}
                     style={styles.messaginginput}
                     onChangeText={(value) => setContent(value)}
                 />
                 <Pressable
+                
                     style={styles.messagingbuttonContainer}
-                    onPress={handleAdd}
+                    onPress={()=>handleAdd()}
                 >
                     <View>
                         <Text style={{ color: "#f2f0f1", fontSize: 20 }}>SEND</Text>
@@ -113,47 +115,13 @@ axios.post(`${APP_API_URL}/message/postMsg/${userid}/${param}`,{
     );
 };
 const styles = StyleSheet.create({
-    loginscreen: {
-        flex: 1,
-        backgroundColor: "#EEF1FF",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 12,
-        width: "100%",
-    },
-    loginheading: {
-        fontSize: 26,
-        marginBottom: 10,
-    },
-    logininputContainer: {
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    logininput: {
-        borderWidth: 1,
-        width: "90%",
-        padding: 8,
-        borderRadius: 2,
-    },
-    loginbutton: {
-        backgroundColor: "green",
-        padding: 12,
-        marginVertical: 10,
-        width: "60%",
-        borderRadius: "50%",
-        elevation: 1,
-    },
-    loginbuttonText: {
-        textAlign: "center",
-        color: "#fff",
-        fontWeight: "600",
-    },
+ 
     chatscreen: {
         backgroundColor: "#F7F7F7",
         flex: 1,
         padding: 10,
         position: "relative",
+        color:"black"
     },
     chatheading: {
         fontSize: 24,
@@ -168,6 +136,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginBottom: 15,
         elevation: 2,
+        color:"black"
     },
     chatheader: {
         flexDirection: "row",
@@ -195,6 +164,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         justifyContent: "center",
         flexDirection: "row",
+        color:"black"
     },
     messaginginput: {
         borderWidth: 1,
@@ -202,6 +172,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         borderRadius: 20,
+        color:'black'
     },
     messagingbuttonContainer: {
         width: "30%",
@@ -226,7 +197,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     modaltext: {
-        color: "#fff",
+        color: "black",
     },
     modalContainer: {
         width: "100%",
@@ -240,6 +211,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
         paddingVertical: 50,
         paddingHorizontal: 20,
+    
     },
     modalinput: {
         borderWidth: 2,
@@ -262,6 +234,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginBottom: 2,
+        color:"black"
     },
     mvatar: {
         marginRight: 5,
@@ -275,6 +248,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         height: 80,
         marginBottom: 10,
+        color:"black"
     },
     cavatar: {
         marginRight: 15,
@@ -287,14 +261,17 @@ const styles = StyleSheet.create({
     cmessage: {
         fontSize: 14,
         opacity: 0.7,
+        color:"black"
     },
     crightContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         flex: 1,
+        color:"black"
     },
     ctime: {
         opacity: 0.5,
     },
   });
+
 export default Messaging;

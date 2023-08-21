@@ -1,7 +1,14 @@
+const Sequelize= require('sequelize')
+const Op = Sequelize.Op;
 const follo= require('../database/models/follow')
+const User = require('../database/models/User');
 const getFollow=async(req,res)=>{
-const follower=await  follo.findAll({})
+    let arr=[parseInt(req.params.theFollowedUserid),parseInt(req.params.thefollowingUserId)]
+const follower=await  follo.findAll({
+
+})
 try {
+    
     res.json(follower)
 } catch (err) {
     console.log(err);

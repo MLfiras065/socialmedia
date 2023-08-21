@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import AddPost from "./AddPost";
 import PostCard from "./PostCard";
+import Navbar from "../Navbar";
 const Home=({navigation}) =>{
   
   const [post, setPost] = useState([]);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity,Button ,FlatList,StyleSheet} from 'react-native';
 import axios from "axios";
 import SessionStorage from 'react-native-session-storage';
-import Main from "./Main";
+import { APP_API_URL } from "../../privt";
 function Users({navigation,route}) {
 
 const {paramKey}=route.params
@@ -20,7 +20,7 @@ try {
  setPostText(posts.data.postText)
  setPostImage(posts.data.postImage)
 } catch (err) {
-    console.log("users",err);
+    console.log(err);
 }
 }
 

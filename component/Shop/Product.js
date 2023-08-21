@@ -21,8 +21,6 @@ const RenderItem = ({po}) => {
     return(
     
     <View style={styles.card}>
- <UpdateProd po={po}/>
- <Deleteprod po={po}/>
       <Image source={{ uri:"https://source.unsplash.com/900x900/?house"}} style={styles.image} />
       <View style={styles.cardBody}>
         <Text
@@ -35,6 +33,8 @@ const RenderItem = ({po}) => {
         style={styles.price}>price:{po.price}   Dt
         </Text>
       </View>
+ <UpdateProd po={po}/>
+ <Deleteprod po={po}/>
     </View>
     )}
     const styles = StyleSheet.create({

@@ -1,74 +1,51 @@
-import React, { useLayoutEffect, useState,useEffect } from "react";
-import axios from "axios";
-import { APP_API_URL } from '../../privt';
+import React, {useState,useEffect} from "react";
 import { View, Text, Pressable,StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import SessionStorage from "react-native-session-storage";
-import io from 'socket.io-client';
+import {io} from 'socket.io-client';
 const ChatComponent = ({ item}) => {
     const navigation = useNavigation();
-    
-    // const userid=SessionStorage.getItem('usersid')
-    // const param=route.params.post.User.id
-    const [message,setMessage]=useState([
-        {
-            id: "1",
-            text: "Hello guys, welcome!",
-            time: "07:50",
-            user: "Tomer",
-        },
-        {
-            id: "2",
-            text: "Hi Tomer, thank you! 😇",
-            time: "08:50",
-            user: "David",
-        },
-    ])
-    // const getMessage=()=> {
-    //     axios.get(`${APP_API_URL}/message/${userid}/${param}`).then((res)=>{
-    //         setMessage(res.data)
-    //     }).catch((err)=>{console.log(err)
-    //     })
-    // }
-    
-    // useLayoutEffect(() => {
-    //     setMessage(item.messages[item.messages.length - 1]);
-    // }, []);
+    console.log("testitem",item);
 
-    ///👇🏻 Navigates to the Messaging screen
+    // const [message,setMessage]=useState([
+    //     {
+    //         id: "1",
+    //         text: "Hello guys, welcome!",
+    //         time: "07:50",
+    //         user: "Tomer",
+    //     },
+    //     {
+    //         id: "2",
+    //         text: "Hi Tomer, thank you! 😇",
+    //         time: "08:50",
+    //         user: "David",
+    //     },
+    // ])
+   
     const handleNavigation = () => {
         navigation.navigate("com", {
-            userid: item.userid,
+            userid: item.theFollowedUserid,
             
         });
     };
-    // let socket = io("http://127.0.0.1:8080", { transports: ["websocket"] })
-    // console.log("socket",socket);
-    // socket.emit("msg",)
-    // const conn=()=>{
-    //   socket.emit('connection')
-    //   console.log("connctrd");
-    // }
-    // const sendMessage = (msg) => {
-    //   socket.emit("connection")
-    //  console.log("test");
-          
-    // }
-    // conn()
-    // sendMessage("hello")
+    const handleCreateRoom = () => {
+        socket.emit("createRoom", "test");
+    };
    
     let socket
+    console.log(socket,"socketttttt");
 useEffect(()=>{
-    // getMessage()
+    try {
+         socket= io("http://192.168.104.7:4000")
+        console.log("socket=>",socket);} 
+    catch (error) {
+        console.log(error);
+    }
 console.log('hi')
-
- socket= io.connect("http://127.0.0.1:3001")
-console.log("socket=>",socket.io);
 },[])
     return (
         <Pressable style={styles.cchat} 
-        onPress={handleNavigation}
+        onPress={()=>{handleCreateRoom(),handleNavigation()}}
         >
             <Ionicons
                 name='person-circle-outline'
@@ -82,12 +59,12 @@ console.log("socket=>",socket.io);
                     <Text style={styles.cusername}>{item.name}</Text>
 
                     <Text style={styles.cmessage}>
-                        {message?.text ? message.text : "Tap to start chatting"}
+                        {item?.content ? item.content : "Tap to start chatting"}
                     </Text>
                 </View>
                 <View>
                     <Text style={styles.ctime}>
-                        {message?.time ? message.time : "now"}
+                        {item?.time ? item.time : "now"}
                     </Text>
                 </View>
             </View>

@@ -1,274 +1,50 @@
-// import React, { useEffect, useState } from "react";
-// import {APP_API_URL} from "../../privt"
-// import axios from "axios";
-// import {
-//     StyleSheet,
-//     TextInput,
-//     View,
-//     Text,
-//     Image,
-//     TouchableOpacity,
-//     FlatList
-//   } from "react-native";
-//   import {io}  from 'socket.io-client';
-// let socket = io("http://localhost:8080", { transports: ["websocket"] })
-// console.log("socket",socket);
-// socket.emit("msg",)
-// const conn=()=>{
-//   socket.emit('connection')
-//   console.log("connctrd");
-// }
-// // const sendMessage = (msg) => {
-// //   socket.emit("connection")
-// //  console.log("test");
-      
-// // }
-// // conn()
-// // sendMessage("hello")
-// export const initiateSocket = () => {
-//   console.log(`Connecting socket...`);
-  
-//   io('http://192.168.104.7:3000').emit('connected',()=>{
-//     console.log('connnected front');
-//   })
-// }
 
-// export const disconnectSocket = () => {
-//   console.log('Disconnecting socket...');
-//   if(socket) socket.disconnect();
-// }
-// export const subscribeToChat = (cb) => {
-//   if (!socket) return(true);
-//   socket.on('chat', msg => {
-//     console.log('Websocket event received!');
-//     return cb(null, msg);
-//   });
-// }
-// export const sendMessage = (room, message) => {
-//   if (socket) socket.emit('chat', { message, room });
-// }
-
-// // const userId = 'user1'
-// // socket.emit('login', userId);
-
-// // // Listen for private messages
-// // socket.on('private message', ({ fromUserId, message }) => {
-// //   console.log(`Received private message from ${fromUserId}: ${message}`);
-// // });
-
-// // // Send private message to user 2
-// // const toUserId = 'user2'; // Change this to the user ID of user 2
-// // socket.emit('private message', { toUserId, message: 'Hello, user 2!' });
-
-// const sendMess=(content,senderId,receiverId)=>{
-//   axios.post(`${APP_API_URL}`,{
-//     senderId: userId,
-//     receiverId:toUserId
-
-//   })
-// }
-// const AllMessages=()=>{
-//     const data = [
-//         { id: 1, date: '9:50 am', type: 'in', message: 'Lorem ipsum dolor sit amet' },
-//         { id: 2, date: '9:50 am', type: 'out', message: 'Lorem ipsum dolor sit amet' },
-//         { id: 3, date: '9:50 am', type: 'in', message: 'Lorem ipsum dolor sit a met' },
-//         { id: 4, date: '9:50 am', type: 'in', message: 'Lorem ipsum dolor sit a met' },
-//         { id: 5, date: '9:50 am', type: 'out', message: 'Lorem ipsum dolor sit a met' },
-//         { id: 6, date: '9:50 am', type: 'out', message: 'Lorem ipsum dolor sit a met' },
-//         { id: 7, date: '9:50 am', type: 'in', message: 'Lorem ipsum dolor sit a met' },
-//         { id: 8, date: '9:50 am', type: 'in', message: 'Lorem ipsum dolor sit a met' },
-//         { id: 9, date: '9:50 am', type: 'in', message: 'Lorem ipsum dolor sit a met' },
-//       ]
-//     const [message,setMessage]=useState([])
-//       const [messages, setMessages] = useState(data)
-//       const [newMsg, setNewMsg] = useState()
-    
-//       const renderDate = date => {
-//         return <Text style={styles.time}>{date}</Text>
-//       }
-     
-//       useEffect(() => {
-//        initiateSocket();
-//         subscribeToChat((err, data) => {
-//           if(err) return;
-
-//         });
-//         return () => {
-//           disconnectSocket();
-//         }
-//       }, []);
-//     return (
-//         <View style={styles.container}>
-//           <FlatList
-//             style={styles.list}
-//             data={messages}
-//             keyExtractor={item => {
-//               return item.id
-//             }}
-//             renderItem={message => {
-//               const item = message.item
-//               let inMessage = item.type === 'in'
-//               let itemStyle = inMessage ? styles.itemIn : styles.itemOut
-//               return (
-//                 <View style={[styles.item, itemStyle]}>
-//                   {!inMessage && renderDate(item.date)}
-//                   <View style={[styles.balloon]}>
-//                     <Text>{item.message}</Text>
-//                   </View>
-//                   {inMessage && renderDate(item.date)}
-//                 </View>
-//               )
-//             }}
-//           />
-//           <View style={styles.footer}>
-//             <View style={styles.inputContainer}>
-//               <TextInput
-//                 style={styles.inputs}
-//                 placeholder="Write a message..."
-//                 underlineColorAndroid="transparent"
-//                 onChangeText={msg => setMessage({ msg })}
-//               />
-//             </View>
-    
-//             <TouchableOpacity 
-//             onPress={()=>console.log("test")}
-//             style={styles.btnSend}>
-//               <Image
-//                 source={{ uri: 'https://img.icons8.com/small/75/ffffff/filled-sent.png' }}
-//                 style={styles.iconSend}
-//               />
-//             </TouchableOpacity>
-//           </View>
-//         </View>
-//       )
-//     }
-    
-//     const styles = StyleSheet.create({
-//       container: {
-//         flex: 1,
-//       },
-//       list: {
-//         paddingHorizontal: 17,
-//       },
-//       footer: {
-//         flexDirection: 'row',
-//         height: 60,
-//         backgroundColor: '#eeeeee',
-//         paddingHorizontal: 10,
-//         padding: 5,
-//       },
-//       btnSend: {
-//         backgroundColor: '#00BFFF',
-//         width: 40,
-//         height: 40,
-//         borderRadius: 360,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//       },
-//       iconSend: {
-//         width: 30,
-//         height: 30,
-//         alignSelf: 'center',
-//       },
-//       inputContainer: {
-//         borderBottomColor: '#F5FCFF',
-//         backgroundColor: '#FFFFFF',
-//         borderRadius: 30,
-//         borderBottomWidth: 1,
-//         height: 40,
-//         flexDirection: 'row',
-//         alignItems: 'center',
-//         flex: 1,
-//         marginRight: 10,
-//       },
-//       inputs: {
-//         height: 40,
-//         marginLeft: 16,
-//         borderBottomColor: '#FFFFFF',
-//         flex: 1,
-//       },
-//       balloon: {
-//         maxWidth: 250,
-//         padding: 15,
-//         borderRadius: 20,
-//       },
-//       itemIn: {
-//         alignSelf: 'flex-start',
-//       },
-//       itemOut: {
-//         alignSelf: 'flex-end',
-//       },
-//       time: {
-//         alignSelf: 'flex-end',
-//         margin: 15,
-//         fontSize: 12,
-//         color: '#808080',
-//       },
-//       item: {
-//         marginVertical: 14,
-//         flex: 1,
-//         flexDirection: 'row',
-//         backgroundColor: '#E0FFFF',
-//         borderRadius: 300,
-//         padding: 5,
-//       },
-//     })
-
-
-// export default AllMessages
-import React from "react";
+import React ,{useLayoutEffect,useEffect,useState}from "react";
+import axios from "axios";
+import {APP_API_URL} from "../../privt"
 import { Feather } from "@expo/vector-icons";
 import { View, Text, Pressable, SafeAreaView, FlatList ,StyleSheet} from "react-native";
 import ChatComponent from "./ChatComponent";
-const Chat = () => {
+import SessionStorage from "react-native-session-storage";
 
-  //👇🏻 Dummy list of rooms
-  const rooms = [
-      {
-          id: "1",
-          name: "Novu Hangouts",
-          messages: [
-              {
-                  id: "1a",
-                  text: "Hello guys, welcome!",
-                  time: "07:50",
-                  user: "Tomer",
-              },
-              {
-                  id: "1b",
-                  text: "Hi Tomer, thank you! 😇",
-                  time: "08:50",
-                  user: "David",
-              },
-          ],
-      },
-      {
-          id: "2",
-          name: "Hacksquad Team 1",
-          messages: [
-              {
-                  id: "2a",
-                  text: "Guys, who's awake? 🙏🏽",
-                  time: "12:50",
-                  user: "Team Leader",
-              },
-              {
-                  id: "2b",
-                  text: "What's up? 🧑🏻‍💻",
-                  time: "03:50",
-                  user: "Victoria",
-              },
-          ],
-      },
-  ];
+import {io} from 'socket.io-client';
+const Chat = ({route}) => {
+    const userid=SessionStorage.getItem('usersid')
+        
 
+const [rooms, setRooms] = useState([]);
+const getFreindList=()=>{
+    axios.get(`${APP_API_URL}/foll/${userid}`).then((res)=>{
+
+            const mutualFriends = friends(res.data, userid);
+            setRooms(mutualFriends);
+    
+    }).catch((err)=>{
+        console.log(err);
+    })
+}
+const friends=(array, userId)=>{
+    const user = array.find(user => user.id === userId);
+    if (!user) {
+      return [];
+    }
+    const followedByUser = array.filter(item => item.thefollowingUserId === userId);
+    const followingUser = array.filter(item => item.theFollowedUserid === userId);
+    const mutualFriends = followedByUser.filter(item =>
+      followingUser.some(followingItem => followingItem.thefollowingUserId === item.theFollowedUserid)
+    );
+    return mutualFriends;
+  }
+
+useEffect(()=>{
+      getFreindList()
+
+    },[])
   return (
       <SafeAreaView style={styles.chatscreen}>
           <View style={styles.chattopContainer}>
               <View style={styles.chatheader}>
                   <Text style={styles.chatheading}>Chats</Text>
-
-          {/* 👇🏻 Logs "ButtonPressed" to the console when the icon is clicked */}
                   <Pressable onPress={() => console.log("Button Pressed!")}>
                       <Feather name='edit' size={24} color='green' />
                   </Pressable>

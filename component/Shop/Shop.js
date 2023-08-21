@@ -5,7 +5,7 @@ import AddProd from "./AddProd";
 import UpdateProd from "./UpdateProd";
 import { StyleSheet, ScrollView, View ,Button} from "react-native";
 import axios from "axios";
-
+import Navbar from "../Navbar";
 const Shop = () => {
   const [poduct, setPoduct] = useState([]);
 

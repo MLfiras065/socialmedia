@@ -64,7 +64,7 @@ console.log("posts",post);
               
               navigation.navigate({name:"profile",
 
-              params:{post:post.User.id}})
+              params:{post:post.User.id,email:post.User.email }})
             }
             >
         <Image

@@ -27,8 +27,6 @@ app.use('/api/user',user)
 app.use('/api/foll',foll)
 app.use('/api/rev',rev)
 
-
-
 const initApp = async () => {
     console.log("Testing the database connection..");
 

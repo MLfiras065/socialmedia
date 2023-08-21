@@ -1,22 +1,36 @@
+const Sequelize= require('sequelize')
+const Op = Sequelize.Op;
 const message= require("../database/models/messages")
 const getmess=async(req,res)=>{
-    const mess=await message.findAll({where:{senderId:req.params.senderId}})
+    let arr=[parseInt(req.params.senderid),parseInt(req.params.reciverid)]
+    
+    console.log(req.params);
+    const mess=await message.findAll({
+        where:{
+        senderId:{
+            [Op.in]:arr
+        },
+        reciverId:{
+            [Op.in]:arr
+        }
+    }
+})
     try {
         
-        if(senderId===senderid&&reciverId===reciverId){
-            res.json(mess)
-        }
+        res.json(mess)
+        
     } catch (err) {
         console.log(err);
     }
 }
 const addedMessages=async(req,res)=>{
-    const msg=await message.create({
-        content:req.body.content,
-        senderId:req.params.senderId,
-        reciverId:req.params.reciverId
-    })
+  console.log("hello");
     try {
+        const msg=await message.create({
+            content:req.body.content,
+            senderId:req.params.senderId,
+            reciverId:req.params.reciverId
+        })
         res.json(msg)
     } catch (err) {
         console.log(err);

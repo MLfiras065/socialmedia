@@ -51,7 +51,7 @@ axios.delete(`${APP_API_URL}/prod/del/${id}`).then((res)=>{
       }}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Hello World!</Text>
+          <Text style={styles.modalText}>Update your post!</Text>
           <TextInput
         
           placeholder='Title'
