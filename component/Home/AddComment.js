@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {APP_API_URL} from "../../privt"
 import * as ImagePicker from "expo-image-picker";
+import { Entypo } from '@expo/vector-icons';
 import {
   View,
   Text,
@@ -77,7 +78,7 @@ function AddComment({comm,route,paramk}) {
         onPress={pickImage}
         style={styles.btnSend}>
               <Image
-                source={{ uri: 'https://icons8.com/icon/53386/image' }}
+                source={{ uri: comm.image }}
                 style={styles.iconSend}
               />
             </TouchableOpacity>
@@ -101,7 +102,7 @@ function AddComment({comm,route,paramk}) {
                 
               />
             </TouchableOpacity>
-            {/* <Button title="add"  onPress={()=>{alert("test")}}/> */}
+            
           </View>
     </View>
   );

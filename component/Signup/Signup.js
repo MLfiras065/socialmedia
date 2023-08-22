@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {APP_ENV,APP_API_URL} from "../../privt"
-// import { storage } from "./config";
-
-import { Button, Image, View, Platform , TextInput, TouchableOpacity,Text} from 'react-native';
+import {APP_API_URL} from "../../privt"
+import { Entypo } from '@expo/vector-icons';
+import { View, TextInput, TouchableOpacity,Text} from 'react-native';
  import * as ImagePicker from 'expo-image-picker';
-import { AdvancedImage } from 'cloudinary-react-native';
-import { CloudinaryImage } from "@cloudinary/url-gen";
 import { URLConfig } from "@cloudinary/url-gen";
 import { CloudConfig } from "@cloudinary/url-gen";
 
@@ -116,7 +113,10 @@ function Signup() {
           <Text style={styles.title}>Sign Up</Text>
           <View style={styles.card}>
             <View style={styles.inputContainer}>
-      
+            <View><Entypo name="images" size={24} color="black"  onPress={pickImage}/>
+            </View>
+            <View><Entypo name="images" size={24} color="black"  onPress={pickImage}/>
+            </View>
               <Text style={styles.label}>firstName</Text>
               <TextInput
                 style={styles.input}

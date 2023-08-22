@@ -20,7 +20,7 @@ const Shop = () => {
       });
   };
 
-  useEffect(() => getProduct(), []);
+  useEffect(() => getProduct(), [!poduct]);
 
   return (
     <ScrollView style={styles.container}>

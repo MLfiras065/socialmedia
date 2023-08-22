@@ -19,6 +19,7 @@ const Home=({navigation}) =>{
   
   const [post, setPost] = useState([]);
   
+ 
   const getPost = () => {
     axios
       .get(`${APP_API_URL}/post/get`)

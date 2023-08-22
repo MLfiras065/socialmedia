@@ -2,6 +2,8 @@ import React,{useState} from 'react'
 import { APP_API_URL } from '../../privt';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput,Button} from 'react-native';
 import SessionStorage from 'react-native-session-storage';
+import * as ImagePicker from "expo-image-picker";
+import { Entypo } from '@expo/vector-icons';
 import axios from 'axios';
 function UpdateProd({po}) {
     console.log("po",po);
@@ -27,6 +29,37 @@ function UpdateProd({po}) {
         const handleUpdate = (id) => {
         updateProd(id,title,price,images,description)
         setModalVisible(!modalVisible)
+        };
+        const pickImage = async () => {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+          });
+      console.log(postImage,"test");
+          setPostImage(result);
+      
+          if (!result.canceled) {
+            setPostImage(result.assets[0].uri);
+          }
+        };
+        const cloudinaryUpload = (photo) => {
+          const data = new FormData();
+          data.append("file", photo);
+          data.append("upload_preset", "ogcodes");
+          data.append("cloud_name", "ogcodes");
+          fetch("https://api.cloudinary.com/v1_1/dzonlv8oi/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              setPostImage(data.secure_url);
+            })
+            .catch((err) => {
+              Alert.alert("An Error Occured While Uploading");
+            });
         };
         const deletePost=(id)=>{
 axios.delete(`${APP_API_URL}/prod/del/${id}`).then((res)=>{
@@ -67,11 +100,7 @@ onChangeText={(e)=>{setDescription(e)}}
           placeholder='price'
 onChangeText={(e)=>{setPrice(e)}}
 />
-          <TextInput
-         
-          placeholder='image'
-onChangeText={(e)=>{setImages(e)}}
-/>
+<Entypo name="images" size={24} color="black"  onPress={pickImage}/>
           <Pressable
             style={[styles.button, styles.buttonClose]}
             

@@ -22,7 +22,7 @@ const CommentCard = ({navigation,route}) => {
         console.log(err);
     })
  }
- useEffect(()=>{getComm()},[])
+ useEffect(()=>{getComm()},[comment])
   return (
     <View>
     <FlatList

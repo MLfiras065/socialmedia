@@ -1,6 +1,7 @@
 import React, { useState} from "react";
 import { APP_API_URL } from '../../privt';
 import axios from "axios";
+import { Entypo } from '@expo/vector-icons';
 import {
   View,
   Text,
@@ -44,6 +45,37 @@ console.log("posts",post);
         console.log(err);
       });
   };
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+console.log(postImage,"test");
+    setPostImage(result);
+
+    if (!result.canceled) {
+      setPostImage(result.assets[0].uri);
+    }
+  };
+  const cloudinaryUpload = (photo) => {
+    const data = new FormData();
+    data.append("file", photo);
+    data.append("upload_preset", "ogcodes");
+    data.append("cloud_name", "ogcodes");
+    fetch("https://api.cloudinary.com/v1_1/dzonlv8oi/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPostImage(data.secure_url);
+      })
+      .catch((err) => {
+        Alert.alert("An Error Occured While Uploading");
+      });
+  };
 
   const handelUpdate = (id) => {
     updatePost(id, postText, postImage);
@@ -79,7 +111,13 @@ console.log("posts",post);
 
         <View style={{ flex: 1 }}>
           <TextInput placeholder="text" onChangeText={(e) => setPostText(e)} />
-          <TextInput placeholder="email" onChangeText={onchange} />
+          <Entypo name="images" size={24} color="black"  onPress={pickImage}/>
+        {postImage && (
+          <Image
+            source={{ uri: post.postImage }}
+            style={{ width: 200, height: 200 }}
+          />
+        )}
           <Button title="update" onPress={() => handelUpdate(post.id)} />
           <TouchableOpacity
             style={styles.postButton}

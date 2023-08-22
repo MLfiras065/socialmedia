@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { APP_API_URL } from '../../privt';
 import * as ImagePicker from "expo-image-picker";
+import { Entypo } from '@expo/vector-icons';
 import {
   StyleSheet,
   View,
@@ -93,7 +94,7 @@ console.log(images,"test");
       />
 
 <View style={styles.buttonContainer}>
-        <Button title="Pick an image from camera roll" onPress={()=>pickImage()} />
+<Entypo name="images" size={24} color="black"  onPress={pickImage}/>
         {images && (
           <Image
             source={{ uri: prod.images }}

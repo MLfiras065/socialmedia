@@ -83,10 +83,11 @@ axios.post(`${APP_API_URL}/message/postMsg/${userid}/${param}`,{
   }, []); 
 
   useEffect(() => {
-    if (socket) {
+    
       getMessage();
-    }
-  }, [socket])
+    
+  }, [])
+  console.log("chatmessa",chatMessages)
   return (
       <View style={styles.messagingscreen}>
           <View

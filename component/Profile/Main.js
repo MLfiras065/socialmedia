@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
 import {APP_API_URL,} from "../../privt"
+import { Entypo } from '@expo/vector-icons';
 import SessionStorage from 'react-native-session-storage';
 import {
   View,
@@ -172,7 +173,7 @@ function Main({ navigation, route }) {
     {userid === paramkey && (
   <View style={styles.headerContainer}>
       <View style={styles.buttonContainer}>
-        <Button title="Pick an image from camera roll" onPress={pickCoverImage} />
+      
         {coverimage && (
           <Image
             source={{ uri:"https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg" }}
@@ -183,7 +184,7 @@ function Main({ navigation, route }) {
     <View style={styles.profileContainer}>
       
         <View style={styles.buttonContainer}>
-          <Button title="Pick an image from camera roll" onPress={pickImage} />
+        
           {image && (
             <Image
             source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5ybhqoQbG6Oxu5aJV2f8D2PrJLr7z1Nzst5GXhqqlbq56iEUBLsREoLCMZcsTC34D6KA&usqp=CAU" }}
@@ -227,7 +228,7 @@ function Main({ navigation, route }) {
     <View>
     <View style={styles.headerContainer}>
       <View style={styles.buttonContainer}>
-        <Button title="Pick an image from camera roll" />
+        {/* <Button title="Pick an image from camera roll" /> */}
         {coverimage && (
           <Image
             source={{ uri: coverimage }}
@@ -238,7 +239,7 @@ function Main({ navigation, route }) {
     <View style={styles.profileContainer}>
       
         <View style={styles.buttonContainer}>
-          <Button title="Pick an image from camera roll"  />
+          {/* <Button title="Pick an image from camera roll"  /> */}
           {image && (
             <Image
             source={{ uri: image }}

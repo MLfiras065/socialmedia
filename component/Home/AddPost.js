@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {APP_ENV,APP_API_URL} from "../../privt"
+import {APP_API_URL} from "../../privt"
 import * as ImagePicker from "expo-image-picker";
+import { Entypo } from '@expo/vector-icons';
 import {
   View,
   Text,
-  ScrollView,
+  
   Image,
   TouchableOpacity,
   StyleSheet,
@@ -76,7 +77,7 @@ console.log(postImage,"test");
         onChangeText={(e) => setPostText(e)}
       />
       <View style={styles.buttonContainer}>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Entypo name="images" size={24} color="black"  onPress={pickImage}/>
         {postImage && (
           <Image
             source={{ uri: post.postImage }}
